@@ -26,6 +26,7 @@ node_debug - for develop))
 write_json - сохраняет имя последнего пользователя
 image - случайное изображение 
 help - справка по командам
+open_keyboard - открытие клавиатуры
 </pre>`
 console.log("Bot works!");
 const bot = new telegramBot(Token, {
@@ -37,6 +38,9 @@ const bot = new telegramBot(Token, {
         }
     }
 })
+
+var notes = [];
+
 bot.on('message', (msg) => {
     const { id } = msg.chat;
     if (msg.text === '/about') {
@@ -59,11 +63,37 @@ bot.on('message', (msg) => {
     }
     else if (msg.text === 'image') {
         randomPic = Math.floor(Math.random() * Math.floor(9));
-        bot.sendPhoto(id, 'images/web'+randomPic.toString()+'.jpg',{
-            caption:'Web🍇'
+        bot.sendPhoto(id, 'images/web' + randomPic.toString() + '.jpg', {
+            caption: 'Web🍇'
         })
     }
+    else if (msg.text === 'Автор бота') {
+        var authorlink = 'https://github.com/angular654';
+        var botRepos = 'https://github.com/angular654/TelegramBot';
+        bot.sendMessage(id, `Created by ${authorlink} \r\n` + `Bot repository :${botRepos}`);
+    }
     else if (msg.text === 'help') {
-        bot.sendMessage(id, helpText, {parse_mode: 'HTML'})
+        bot.sendMessage(id, helpText, { parse_mode: 'HTML' })
+    }
+    else if (msg.text === 'open_keyboard' || '/start') {
+        bot.sendMessage(id, 'Клавиатура открыта', {
+            reply_markup: {
+                keyboard: [
+                    [
+                        {
+                            text: 'Автор бота'
+
+                        }, 
+                        {
+                            text: 'help'
+                        },
+                        {
+                            text: 'image'
+                        }
+                    ],
+                ],
+                one_time_keyboard: false
+            }
+        })
     }
 })
